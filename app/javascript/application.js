@@ -1,6 +1,6 @@
 import "@hotwired/turbo-rails"
 import "controllers"
-import "./sidebar"
+import "sidebar"
 
 // Utilitário de feedback visual para a área de status
 function setStatus(message, kind = "info") {
