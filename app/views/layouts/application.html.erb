@@ -87,5 +87,8 @@
         <%= yield %>
       </main>
     </div>
+    
+    <%# Método direto: Carrega o sidebar.js via Asset Pipeline %>
+    <%= javascript_include_tag "sidebar", defer: true %>
   </body>
 </html>
