@@ -6,7 +6,7 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
-  # Eager load code on boot for better performance and memory savings (ignored by Rake tasks).
+  # Eager load code on boot for better performance and memory savings.
   config.eager_load = true
 
   # Full error reports are disabled.
@@ -15,76 +15,74 @@ Rails.application.configure do
   # Turn on fragment caching in view templates.
   config.action_controller.perform_caching = true
 
-  # Cache assets for far-future expiry since they are all digest stamped.
+  # =================================================================
+  # AJUSTES PARA O RENDER
+  # =================================================================
+
+  # 1. Servir arquivos estáticos (CSS, JS, imagens) a partir do Rails.
+  #    O Render precisa disso para que os assets funcionem.
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+
+  # 2. Desabilitar compilação de assets em tempo real.
+  #    Os assets serão pré-compilados durante o build no Render.
+  config.assets.compile = false
+
+  # 3. Cache de assets (seu código já tinha, mantido por ser bom).
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.asset_host = "http://assets.example.com"
+  # 4. Configurar Active Storage para usar o serviço de produção.
+  #    Isso vai usar o disco persistente do Render que configuramos no storage.yml.
+  config.active_storage.service = :production
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
-
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = true
-
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # 5. Forçar SSL para segurança.
   config.force_ssl = true
 
-  # Skip http-to-https redirect for the default health check endpoint.
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  # 6. Permitir que a aplicação responda ao domínio do Render.
+  #    A variável de ambiente HOST será configurada no painel do Render.
+  config.hosts << ENV.fetch("HOST") if ENV["HOST"].present?
 
-  # Log to STDOUT with the current request id as a default log tag.
+  # =================================================================
+  # FIM DOS AJUSTES PARA O RENDER
+  # =================================================================
+
+  # Log para STDOUT (padrão para plataformas de deploy).
   config.log_tags = [ :request_id ]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
-  # Change to "debug" to log everything (including potentially personally-identifiable information!).
+  # Nível do log.
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
-  # Prevent health checks from clogging up the logs.
+  # Não poluir os logs com health checks.
   config.silence_healthcheck_path = "/up"
 
-  # Don't log any deprecations.
+  # Não mostrar avisos de "deprecation".
   config.active_support.report_deprecations = false
 
-  # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  # =================================================================
+  # Simplificado para o deploy inicial.
+  # Seu arquivo original usava Solid Cache e Solid Queue com bancos de dados
+  # separados. Para um deploy inicial, é mais simples usar o padrão.
+  # Se precisar deles, podemos reativar depois com as variáveis corretas.
+  # =================================================================
+  # config.cache_store = :solid_cache_store
+  # config.active_job.queue_adapter = :solid_queue
+  # config.solid_queue.connects_to = { database: { writing: :queue } }
+  # =================================================================
 
-  # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
-
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # Configuração de Action Mailer (se for usar envio de emails).
+  # Lembre-se de configurar as credenciais e o host correto.
+  config.action_mailer.default_url_options = { host: ENV.fetch("HOST", "localhost") }
   # config.action_mailer.raise_delivery_errors = false
 
-  # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
-
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
-  # config.action_mailer.smtp_settings = {
-  #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
-  #   password: Rails.application.credentials.dig(:smtp, :password),
-  #   address: "smtp.example.com",
-  #   port: 587,
-  #   authentication: :plain
-  # }
-
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
+  # I18n fallbacks.
   config.i18n.fallbacks = true
 
-  # Do not dump schema after migrations.
+  # Não criar dump do schema após migrations em produção.
   config.active_record.dump_schema_after_migration = false
 
-  # Only use :id for inspections in production.
+  # Apenas o :id nos logs de inspeção do Active Record.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
+  # Removido, pois a linha 'config.hosts' acima já lida com isso de forma mais flexível.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
