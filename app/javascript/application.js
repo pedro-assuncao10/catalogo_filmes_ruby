@@ -22,6 +22,7 @@ document.addEventListener("turbo:load", () => {
   if (!searchBtn) return;
 
   searchBtn.addEventListener("click", async () => {
+    console.log("Botão 'Buscar dados' foi clicado!");
     const title = searchInput?.value?.trim();
     if (!title) {
       setStatus("Por favor, digite um título para buscar.", "error");

@@ -1,3 +1,4 @@
+console.log("Arquivo sidebar.js carregado com sucesso!");
 document.addEventListener("turbo:load", () => {
     const sidebar = document.querySelector("[data-sidebar]");
     const toggle  = document.querySelector("[data-sidebar-toggle]");
