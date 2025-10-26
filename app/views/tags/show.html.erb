@@ -1,0 +1,32 @@
+<header class="tag-header">
+  <h1 class="page-title">
+    Filmes com a tag
+    <span class="chip chip-soft">#<%= @tag.name %></span>
+  </h1>
+  <p class="muted"><%= @movies.size %> filme(s) encontrados</p>
+</header>
+
+<% if @movies.any? %>
+  <section class="grid grid-movies">
+    <% @movies.each do |movie| %>
+      <article class="movie-card">
+        <%= link_to movie, class: "poster-link" do %>
+          <% if movie.poster.attached? %>
+            <%= image_tag movie.poster, class: "poster" %>
+          <% else %>
+            <div class="poster placeholder">Sem pôster</div>
+          <% end %>
+        <% end %>
+
+        <div class="movie-meta">
+          <h2 class="movie-title"><%= link_to movie.title, movie %></h2>
+          <p class="movie-info"><span class="muted">Diretor:</span> <%= movie.director %></p>
+        </div>
+      </article>
+    <% end %>
+  </section>
+<% else %>
+  <section class="panel">
+    <p class="muted">Nenhum filme encontrado com esta tag.</p>
+  </section>
+<% end %>

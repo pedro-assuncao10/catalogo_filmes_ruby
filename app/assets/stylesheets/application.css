@@ -1,0 +1,16 @@
+/*
+ *= require_self
+ *= require custom
+ */
+
+.tag-cloud a {
+    padding: 2px 5px;
+    text-decoration: none;
+    color: #337ab7;
+  }
+  
+  .tag-cloud .tag-smallest { font-size: 0.8em; }
+  .tag-cloud .tag-small   { font-size: 1.0em; }
+  .tag-cloud .tag-medium  { font-size: 1.2em; }
+  .tag-cloud .tag-large   { font-size: 1.4em; }
+  .tag-cloud .tag-largest  { font-size: 1.6em; font-weight: bold; }

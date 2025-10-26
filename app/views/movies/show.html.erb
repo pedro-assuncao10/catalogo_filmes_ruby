@@ -1,0 +1,125 @@
+<section class="hero hero-movie">
+  <div class="hero-poster">
+    <% if @movie.poster.attached? %>
+      <% if @movie.external_url.present? %>
+        <%= link_to @movie.external_url, target: "_blank", rel: "noopener noreferrer", class: "poster-link" do %>
+          <%= image_tag @movie.poster, class: "poster-xl" %>
+        <% end %>
+      <% else %>
+        <%= image_tag @movie.poster, class: "poster-xl" %>
+      <% end %>
+    <% else %>
+      <div class="poster-xl placeholder">Sem pôster</div>
+    <% end %>
+  </div>
+
+  <div class="hero-info">
+    <h1 class="title-xl">
+      <% if @movie.external_url.present? %>
+        <%= link_to @movie.title, @movie.external_url, target: "_blank", rel: "noopener noreferrer" %>
+      <% else %>
+        <%= @movie.title %>
+      <% end %>
+    </h1>
+
+    <div class="meta">
+      <span class="meta-item"><strong>Ano:</strong> <%= @movie.release_year %></span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><strong>Duração:</strong> <%= @movie.duration %> min</span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><strong>Diretor:</strong> <%= @movie.director %></span>
+    </div>
+
+    <% if @movie.categories.any? %>
+      <div class="chips">
+        <% @movie.categories.order(:name).each do |category| %>
+          <span class="chip"><%= category.name %></span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @movie.tags.any? %>
+      <div class="chips">
+        <% @movie.tags.order(:name).each do |tag| %>
+          <%= link_to tag_path(tag.name), class: "chip chip-soft" do %>
+            <%= tag.name %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <p class="synopsis"><%= @movie.synopsis %></p>
+
+    <div class="actions">
+      <% if user_signed_in? && @movie.user == current_user %>
+        <%= link_to edit_movie_path(@movie), class: "btn btn-primary" do %>
+          <i class="ni ni-edit"></i> Editar
+        <% end %>
+        <%= button_to @movie, method: :delete, data: { turbo_confirm: "Tem certeza?" }, class: "btn btn-ghost danger" do %>
+          <i class="ni ni-trash"></i> Apagar
+        <% end %>
+      <% end %>
+      <%= link_to "Voltar ao Catálogo", root_path, class: "btn btn-ghost" %>
+    </div>
+  </div>
+</section>
+
+<% if @related_movies.present? %>
+  <section class="panel">
+    <h2 class="panel-title">Relacionados</h2>
+    <div class="rail">
+      <% @related_movies.each do |related_movie| %>
+        <div class="rail-item">
+          <%= link_to related_movie, class: "poster-link" do %>
+            <% if related_movie.poster.attached? %>
+              <%= image_tag related_movie.poster, class: "poster" %>
+            <% else %>
+              <div class="poster placeholder sm">Sem pôster</div>
+            <% end %>
+          <% end %>
+          <p class="rail-title"><%= link_to related_movie.title, related_movie %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<section class="panel">
+  <h2 class="panel-title">Adicionar Comentário</h2>
+  <%= form_with(model: [ @movie, Comment.new ], html: { class: "form form-compact" }) do |form| %>
+    <% unless user_signed_in? %>
+      <div class="field">
+        <label class="label" for="comment_name">Seu nome</label>
+        <%= form.text_field :name, class: "input" %>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <label class="label" for="comment_content">Seu comentário</label>
+      <%= form.text_area :content, rows: 4, class: "textarea" %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "Enviar Comentário", class: "btn btn-brand" %>
+    </div>
+  <% end %>
+</section>
+
+<section class="panel">
+  <h2 class="panel-title">Comentários</h2>
+  <div id="comments">
+    <% if @movie.comments.order(created_at: :desc).any? %>
+      <% @movie.comments.order(created_at: :desc).each do |comment| %>
+        <article class="comment-card">
+          <header class="comment-head">
+            <strong class="comment-author"><%= comment.user.present? ? comment.user.name : comment.name %></strong>
+            <small class="comment-date"><%= l comment.created_at, format: :short %></small>
+          </header>
+          <p class="comment-body"><%= comment.content %></p>
+        </article>
+      <% end %>
+    <% else %>
+      <p class="muted">Seja o primeiro a comentar!</p>
+    <% end %>
+  </div>
+</section>

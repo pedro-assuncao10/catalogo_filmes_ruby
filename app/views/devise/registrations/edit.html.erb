@@ -1,0 +1,48 @@
+<h1 class="page-title">Editar Perfil</h1>
+
+<section class="panel">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form form-compact" }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="grid grid-2">
+      <div class="field span-2">
+        <label class="label" for="user_email">Email</label>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <p class="muted span-2">Aguardando confirmação do email: <%= resource.unconfirmed_email %></p>
+      <% end %>
+
+      <div class="field span-2">
+        <label class="label" for="user_password">Senha</label>
+        <%= f.password_field :password, autocomplete: "new-password", class: "input", placeholder: "Deixe em branco para não alterar" %>
+        <small class="muted">Mínimo de 6 caracteres.</small>
+      </div>
+
+      <div class="field span-2">
+        <label class="label" for="user_password_confirmation">Confirmação de senha</label>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input" %>
+      </div>
+
+      <div class="field span-2">
+        <label class="label" for="user_current_password">Senha atual</label>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "input", placeholder: "Necessária para confirmar as mudanças" %>
+      </div>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Atualizar", class: "btn btn-brand" %>
+      <%= link_to "Voltar", root_path, class: "btn btn-ghost" %>
+    </div>
+  <% end %>
+</section>
+
+<section class="panel">
+  <h3 class="panel-title">Cancelar minha conta</h3>
+  <p class="muted">Essa ação é irreversível.</p>
+  <div class="actions">
+    <%= button_to "Cancelar minha conta", registration_path(resource_name),
+          data: { turbo_confirm: "Tem certeza?" }, method: :delete, class: "btn btn-ghost danger" %>
+  </div>
+</section>

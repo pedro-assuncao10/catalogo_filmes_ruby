@@ -1,0 +1,10 @@
+<% if resource.errors.any? %>
+  <div class="alert alert-error">
+    <strong><%= pluralize(resource.errors.count, "erro") %></strong> impediram o salvamento:
+    <ul class="list">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

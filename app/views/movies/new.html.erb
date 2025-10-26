@@ -1,0 +1,17 @@
+<h1 class="page-title">Cadastrar Novo Filme</h1>
+
+<section class="panel panel-search">
+  <div class="search-row">
+    <div class="field grow">
+      <label class="label">Buscar Dados do Filme Online</label>
+      <input type="text" id="movie-search-title" class="input" placeholder="Ex: The Matrix">
+      <small class="muted">Digite o título original e clique em buscar para preencher os campos abaixo.</small>
+    </div>
+    <button type="button" id="search-movie-btn" class="btn btn-primary">
+      <i class="ni ni-search"></i> Buscar dados
+    </button>
+  </div>
+  <div id="search-status" class="status"></div>
+</section>
+
+<%= render "form", movie: @movie %>

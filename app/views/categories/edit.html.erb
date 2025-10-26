@@ -1,0 +1,10 @@
+<!-- app/views/categories/edit.html.erb -->
+<h1 class="page-title">Editar Categoria</h1>
+
+<section class="panel">
+  <%= render "form", category: @category %>
+</section>
+
+<div class="actions">
+  <%= link_to "Voltar para Categorias", categories_path, class: "btn btn-ghost" %>
+</div>

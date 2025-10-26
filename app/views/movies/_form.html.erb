@@ -1,0 +1,78 @@
+<%= form_with(model: movie, html: { class: "form form-movie" }) do |form| %>
+  <% if movie.errors.any? %>
+    <div class="alert alert-error">
+      <strong><%= pluralize(movie.errors.count, "erro") %></strong> impediram o salvamento:
+      <ul class="list">
+        <% movie.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-2">
+    <div class="field">
+      <label for="movie_title" class="label">Título</label>
+      <%= form.text_field :title, id: "movie_title", class: "input", placeholder: "Título do filme" %>
+    </div>
+
+    <div class="field">
+      <label for="movie_director" class="label">Diretor</label>
+      <%= form.text_field :director, id: "movie_director", class: "input", placeholder: "Nome do diretor" %>
+    </div>
+
+    <div class="field">
+      <label for="movie_release_year" class="label">Ano de Lançamento</label>
+      <%= form.number_field :release_year, id: "movie_release_year", class: "input", placeholder: "1999" %>
+    </div>
+
+    <div class="field">
+      <label for="movie_duration" class="label">Duração (min)</label>
+      <%= form.number_field :duration, id: "movie_duration", class: "input", placeholder: "136" %>
+    </div>
+
+    <div class="field span-2">
+      <label for="movie_synopsis" class="label">Sinopse</label>
+      <%= form.text_area :synopsis, id: "movie_synopsis", class: "textarea", rows: 5, placeholder: "Descreva o enredo..." %>
+    </div>
+
+    <div class="field">
+      <label class="label">Pôster do Filme</label>
+      <div class="file">
+        <i class="ni ni-plus"></i>
+        <span class="file-label">Selecionar pôster</span>
+        <%= form.file_field :poster, class: "file-input", accept: "image/*" %>
+      </div>
+      <small class="muted">Formatos recomendados: JPG/WEBP, proporção 2:3.</small>
+    </div>
+
+    <div class="field span-2">
+      <label class="label" for="movie_external_url">Link do filme (opcional)</label>
+      <%= form.url_field :external_url, class: "input", placeholder: "https://..." %>
+      <small class="muted">Use um link oficial: trailer, streaming, site do filme etc.</small>
+    </div>
+
+    <div class="field">
+      <label class="label">Categorias</label>
+      <div class="chips-select">
+        <%= form.collection_check_boxes :category_ids, (@categories || Category.none), :id, :name do |b| %>
+          <label class="chip-select">
+            <%= b.check_box %>
+            <span><%= b.text %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="field span-2">
+      <label class="label">Tags (separadas por vírgula)</label>
+      <%= form.text_field :tag_list, value: @movie.tag_list, class: "input", placeholder: "ficção científica, ação, thriller" %>
+      <small class="muted">Pressione vírgula para separar; serão mostradas como chips.</small>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Salvar Filme", class: "btn btn-brand" %>
+    <%= link_to "Cancelar", root_path, class: "btn btn-ghost" %>
+  </div>
+<% end %>

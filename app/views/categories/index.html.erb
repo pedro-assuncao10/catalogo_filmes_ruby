@@ -1,0 +1,38 @@
+<!-- app/views/categories/index.html.erb -->
+<h1 class="page-title">Gerenciar Categorias</h1>
+
+<section class="panel">
+  <h3 class="panel-title">Adicionar Nova Categoria</h3>
+  <%= render "form", category: @category %>
+</section>
+
+<section class="panel">
+  <h3 class="panel-title">Categorias Existentes</h3>
+
+  <% if @categories.any? %>
+    <ul class="cards categories-cards">
+      <% @categories.each do |category| %>
+        <li class="card">
+          <div class="card-body">
+            <span class="badge badge-soft">Categoria</span>
+            <h4 class="card-title"><%= category.name %></h4>
+          </div>
+          <div class="card-actions">
+            <%= link_to edit_category_path(category), class: "btn btn-primary" do %>
+              <i class="ni ni-edit"></i> Editar
+            <% end %>
+            <%= button_to category, method: :delete, data: { turbo_confirm: 'Tem certeza? Isso pode remover a categoria de alguns filmes.' }, class: "btn btn-ghost danger" do %>
+              <i class="ni ni-trash"></i> Apagar
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="muted">Nenhuma categoria criada ainda.</p>
+  <% end %>
+</section>
+
+<div class="actions">
+  <%= link_to "Voltar ao Catálogo", root_path, class: "btn btn-ghost" %>
+</div>

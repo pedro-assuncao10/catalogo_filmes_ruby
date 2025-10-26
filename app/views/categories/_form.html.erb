@@ -1,0 +1,24 @@
+<!-- app/views/categories/_form.html.erb -->
+<%= form_with(model: category, html: { class: "form form-compact" }) do |form| %>
+  <% if category.errors.any? %>
+    <div class="alert alert-error">
+      <strong><%= pluralize(category.errors.count, "erro") %></strong> impediram o salvamento:
+      <ul class="list">
+        <% category.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-2">
+    <div class="field span-2">
+      <label class="label" for="category_name">Nome da Categoria</label>
+      <%= form.text_field :name, id: "category_name", class: "input", placeholder: "Ex.: Ação" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= form.submit (category.persisted? ? "Salvar alterações" : "Adicionar"), class: "btn btn-brand" %>
+  </div>
+<% end %>

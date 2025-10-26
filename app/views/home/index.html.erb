@@ -1,0 +1,58 @@
+<h1 class="page-title">Catálogo de Filmes</h1>
+
+<% if @movies.any? %>
+  <div class="grid grid-movies">
+    <% @movies.each do |movie| %>
+      <div class="movie-card">
+        <%= link_to movie, class: "poster-link" do %>
+          <% if movie.poster.attached? %>
+            <%= image_tag movie.poster, class: "poster" %>
+          <% else %>
+            <div class="poster placeholder">Sem imagem</div>
+          <% end %>
+        <% end %>
+
+        <div class="movie-meta">
+          <h2 class="movie-title"><%= link_to movie.title, movie %></h2>
+          <p class="movie-info"><span class="muted">Diretor:</span> <%= movie.director %></p>
+          <p class="movie-info"><span class="muted">Ano:</span> <%= movie.release_year %></p>
+
+          <% if movie.categories.any? %>
+            <div class="chips">
+              <% movie.categories.order(:name).each do |category| %>
+                <span class="chip"><%= category.name %></span>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if movie.tags.any? %>
+            <div class="chips">
+              <% movie.tags.order(:name).each do |tag| %>
+                <%= link_to tag_path(tag.name), class: "chip chip-soft" do %>
+                  <%= tag.name %>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="pagination-controls">
+    <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+  </div>
+<% else %>
+  <p class="muted">Nenhum filme encontrado com esses filtros.</p>
+<% end %>
+
+<% if @tag_cloud.present? %>
+  <hr class="divider">
+  <h3>Tags Populares</h3>
+  <div class="tag-cloud">
+    <% max_count = @tag_cloud.first.movie_count %>
+    <% @tag_cloud.each do |tag| %>
+      <%= link_to tag.name, tag_path(tag.name), class: tag_cloud_class(tag.movie_count, max_count) %>
+    <% end %>
+  </div>
+<% end %>
