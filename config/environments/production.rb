@@ -31,7 +31,7 @@ Rails.application.configure do
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
   # 4. Configurar Active Storage para usar o serviço de produção.
-  #    Isso vai usar o disco persistente do Render que configuramos no storage.yml.
+  #    Isso vai usar o disco persistente do Render (se configurado em plano pago).
   config.active_storage.service = :production
 
   # 5. Forçar SSL para segurança.
@@ -60,9 +60,8 @@ Rails.application.configure do
 
   # =================================================================
   # Simplificado para o deploy inicial.
-  # Seu arquivo original usava Solid Cache e Solid Queue com bancos de dados
-  # separados. Para um deploy inicial, é mais simples usar o padrão.
-  # Se precisar deles, podemos reativar depois com as variáveis corretas.
+  # As linhas abaixo precisam estar comentadas para evitar os erros
+  # de 'database not configured' que você viu.
   # =================================================================
   # config.cache_store = :solid_cache_store
   # config.active_job.queue_adapter = :solid_queue
