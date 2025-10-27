@@ -3,7 +3,7 @@
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = "1.0"
 # config/initializers/assets.rb
-Rails.application.config.assets.precompile += %w( sidebar.js )
+Rails.application.config.assets.precompile += %w( sidebar.js movie_search.js )
 
 
 # Add additional assets to the asset load path.
